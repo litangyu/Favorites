@@ -3,8 +3,6 @@ package com.acg233.favorites.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.acg233.favorites.network.download.DownState;
-
 /**
  * Created by JokAr on 16/7/5.
  */

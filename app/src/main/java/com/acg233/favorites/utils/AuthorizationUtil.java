@@ -30,13 +30,20 @@ public class AuthorizationUtil {
         }
     }
 
+    public static String EncoderToken(Long time) throws UnsupportedEncodingException,
+            NoSuchAlgorithmException {
+        String randomString = getRandomString(32);
+        String timeMD5 = EncoderByMd5(String.valueOf(time));
+        return EncoderByMd5(randomString + timeMD5);
+    }
+
     public static String EncoderByMd5(String str) throws NoSuchAlgorithmException,
             UnsupportedEncodingException {
         //加密后的字符串
         byte[] bs = md5.digest(str.getBytes());
         StringBuilder sb = new StringBuilder(40);
-        for(byte x:bs) {
-            if((x & 0xff)>>4 == 0) {
+        for (byte x : bs) {
+            if ((x & 0xff) >> 4 == 0) {
                 sb.append("0").append(Integer.toHexString(x & 0xff));
             } else {
                 sb.append(Integer.toHexString(x & 0xff));
@@ -46,7 +53,7 @@ public class AuthorizationUtil {
     }
 
     @NonNull
-    public static String getRandomString( int length) {
+    public static String getRandomString(int length) {
         //length表示生成字符串的长度
         String base = "abcdefghijklmnopqrstuvwxyz0123456789";
         Random random = new Random();

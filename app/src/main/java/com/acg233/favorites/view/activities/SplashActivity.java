@@ -2,18 +2,20 @@ package com.acg233.favorites.view.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.acg233.favorites.App;
 import com.acg233.favorites.R;
 import com.acg233.favorites.bean.BaseRequest;
+import com.acg233.favorites.bean.DownloadResponse;
 import com.acg233.favorites.network.FavoritesService;
-import com.acg233.favorites.service.DownloadService;
 import com.acg233.favorites.utils.AuthorizationUtil;
 import com.acg233.favorites.utils.RetrofitManager;
 import com.umeng.analytics.MobclickAgent;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -21,8 +23,10 @@ import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
 
 import me.lty.basemvplibrary.utils.DataKeeper;
+import me.lty.basemvplibrary.utils.FileUtils;
 import okhttp3.ResponseBody;
 import rx.Observable;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -49,9 +53,6 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
-        Intent intent = new Intent(this, DownloadService.class);
-        startService(intent);
 
         Observable.timer(3, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -82,15 +83,13 @@ public class SplashActivity extends AppCompatActivity {
                         //创建令牌
                         keeper = new DataKeeper(App.context(), "app");
                         try {
-                            String randomString = AuthorizationUtil.getRandomString(32);
-                            String timeMD5 = AuthorizationUtil.EncoderByMd5(String.valueOf(time));
-                            token = AuthorizationUtil.EncoderByMd5(randomString + timeMD5);
-                            keeper.put("token", token);
-                        } catch (NoSuchAlgorithmException e) {
-                            e.printStackTrace();
+                            token = AuthorizationUtil.EncoderToken(time);
                         } catch (UnsupportedEncodingException e) {
                             e.printStackTrace();
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
                         }
+                        keeper.put("token", token);
                         return favoritesService.postToken();
                     }
                 })
@@ -108,6 +107,55 @@ public class SplashActivity extends AppCompatActivity {
                     public void call(Integer integer) {
                         if (integer != 1) {
                             //强制更新
+                            favoritesService.download("http://www.baidu.com")
+                                    .unsubscribeOn(Schedulers.io())
+                                    .map(new Func1<ResponseBody, InputStream>() {
+                                        @Override
+                                        public InputStream call(ResponseBody body) {
+                                            return body.byteStream();
+                                        }
+                                    })
+                                    .observeOn(Schedulers.computation())
+                                    .doOnNext(new Action1<InputStream>() {
+                                        @Override
+                                        public void call(InputStream inputStream) {
+                                            try {
+                                                File outputFile = new File(Environment.getExternalStoragePublicDirectory
+                                                        (Environment.DIRECTORY_DOWNLOADS), "Favorites.apk");
+                                                FileUtils.writeFile(inputStream, outputFile);
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+//                                                throw new CustomizeException(e.getMessage(), e);
+                                            }
+                                        }
+                                    })
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(new Subscriber<InputStream>() {
+                                        @Override
+                                        public void onCompleted() {
+//                                            DownloadResponse download = new DownloadResponse();
+//                                            download.setProgress(100);
+//                                            sendIntent(download);
+//
+//                                            notificationManager.cancel(0);
+//                                            notificationBuilder.setProgress(0, 0, false);
+//                                            notificationBuilder.setContentText("File Downloaded");
+//                                            notificationManager.notify(0, notificationBuilder
+//                                                    .build());
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+                                            e.printStackTrace();
+//                                            downloadCompleted();
+//                                            Log.e(TAG, "onError: " + e.getMessage());
+                                        }
+
+                                        @Override
+                                        public void onNext(InputStream inputStream) {
+
+                                        }
+                                    });
                         } else {
                             finish();
                         }

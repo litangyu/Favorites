@@ -42,10 +42,10 @@ public class RetrofitManager {
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.addInterceptor(logging);
         }
-        OkHttpClient okHttpClient = builder.connectTimeout(App.ConnectTimeOut, TimeUnit.SECONDS)
+        OkHttpClient okHttpClient = builder
+                .connectTimeout(App.ConnectTimeOut, TimeUnit.SECONDS)
                 .readTimeout(App.ReadTimeOut,TimeUnit.SECONDS)
                 .writeTimeout(App.WriteTimeOut,TimeUnit.SECONDS)
-                .connectTimeout(App.ConnectTimeOut,TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
                 .build();
 
@@ -69,14 +69,6 @@ public class RetrofitManager {
             }
         }
         return instance;
-    }
-
-    public static void init(){
-        if (instance == null) {
-            instance = new RetrofitManager();
-        }else {
-            return;
-        }
     }
 
     public FavoritesService getFavoritesService() {

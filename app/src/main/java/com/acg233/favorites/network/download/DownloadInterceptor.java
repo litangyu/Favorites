@@ -9,11 +9,11 @@ import okhttp3.Response;
  * Interceptor for download
  * Created by JokAr on 16/5/11.
  */
-public class DownloadProgressInterceptor implements Interceptor {
+public class DownloadInterceptor implements Interceptor {
 
-    private DownloadProgressListener listener;
+    private DownloadListener listener;
 
-    public DownloadProgressInterceptor(DownloadProgressListener listener) {
+    public DownloadInterceptor(DownloadListener listener) {
         this.listener = listener;
     }
 
@@ -22,7 +22,7 @@ public class DownloadProgressInterceptor implements Interceptor {
         Response originalResponse = chain.proceed(chain.request());
 
         return originalResponse.newBuilder()
-                .body(new DownloadProgressResponseBody(originalResponse.body(), listener))
+                .body(new DownloadResponseBody(originalResponse.body(), listener))
                 .build();
     }
 }
