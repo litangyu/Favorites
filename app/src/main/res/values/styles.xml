@@ -1,0 +1,45 @@
+<resources>
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light">
+        <item name="windowActionBar">false</item>
+        <!--<del><favoritesItem name="android:windowNoTitle">true</favoritesItem></del>-->
+        <!-- 使用 API Level 22 編譯的話，要拿掉前綴字 -->
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme" parent="AppTheme.Base">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="ImageTranslucentTheme" parent="AppTheme">
+        <!--在Android 4.4之前的版本上运行，直接跟随系统主题-->
+    </style>
+
+    <style name="ColorTranslucentTheme" parent="AppTheme">
+        <!--在Android 4.4之前的版本上运行，直接跟随系统主题-->
+    </style>
+
+    <style name="base_fresco_style">
+        <item name="placeholderImage">@mipmap/app_icon</item>
+        <item name="placeholderImageScaleType">fitCenter</item>
+        <item name="failureImage">@mipmap/app_icon</item>
+        <item name="failureImageScaleType">fitCenter</item>
+        <item name="retryImage">@mipmap/app_icon</item>
+        <item name="retryImageScaleType">fitCenter</item>
+    </style>
+
+    <style name="fresco_oval" parent="base_fresco_style">
+        <item name="fadeDuration">30</item>
+        <item name="actualImageScaleType">fitCenter</item>
+        <item name="roundAsCircle">true</item>
+    </style>
+
+    <style name="personal_center_text">
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+</resources>

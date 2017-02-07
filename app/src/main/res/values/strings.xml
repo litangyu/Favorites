@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">里番收藏夹</string>
+    <string name="app_name_en">Favorites</string>
+    <string name="copy_right">Copyright © 2015 - 2017 里番收藏夹Android客户端 All Rights Reserved</string>
+    <!--<string name="app_name">Favorites</string>-->
+    <string name="modify_pwd">修改密码</string>
+    <string name="log_off">退出登录</string>
+    <string name="my_favorites">我的收藏</string>
+    <string name="my_notify">我的通知</string>
+    <string name="exchange">兑换奖励</string>
+    <string name="modify_nick_name">修改昵称</string>
+    <string name="invite_people">填写邀请人</string>
+    <string name="search_title">搜索</string>
+    <string name="search_hint">搜索番剧</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">用户名或邮箱地址</string>
+    <string name="prompt_password">密码</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">登录</string>
+    <string name="error_invalid_qq_email">请输入正确的QQ邮箱地址</string>
+    <string name="error_invalid_password">密码格式错误</string>
+    <string name="error_incorrect_password">密码错误</string>
+    <string name="error_field_required">请输入用户名或邮箱地址</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+</resources>
