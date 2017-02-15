@@ -59,7 +59,7 @@ public class HistoryFragment extends BaseFragment<HomePresenterImpl> {
     protected void initData() {
         MultiTypeAdapter adapter = new MultiTypeAdapter();
         HistoryItemViewProvider historyItemViewProvider = new HistoryItemViewProvider(getActivity());
-        adapter.register(FavoritesItem.class, historyItemViewProvider);
+        adapter.register(HistoryItem.class, historyItemViewProvider);
         mRv_history.setAdapter(adapter);
         Items historyItems = new Items();
         for (int i = 0;i<10;i++){

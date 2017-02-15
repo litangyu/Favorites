@@ -3,9 +3,7 @@ package com.acg233.favorites.view.activities;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -20,33 +18,29 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.widget.TextView;
 
 import com.acg233.favorites.R;
 import com.acg233.favorites.bean.BadQQRequest;
-import com.acg233.favorites.bean.UserResponse;
 import com.acg233.favorites.presenter.HomePresenterImpl;
-import com.acg233.favorites.utils.RetrofitManager;
+import com.acg233.favorites.network.RetrofitManager;
 import com.acg233.favorites.view.adapter.HomeFragmentAdapter;
 import com.acg233.favorites.view.fragments.HistoryFragment;
 import com.acg233.favorites.view.fragments.NewsFragment;
 import com.acg233.favorites.view.fragments.PersonalCenterFragment;
 import com.acg233.favorites.view.impl.HomeView;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
-import java.io.BufferedInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import me.lty.basemvplibrary.utils.Check;
 import me.lty.basemvplibrary.utils.DataKeeper;
 import rx.Observable;
 import rx.Subscriber;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -126,16 +120,16 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
 
     private void actionFour() {
         //获取手机\Tencent\MobileQQ\artfilter\*.config 提取QQ号
-        Observable.create(
-                new Observable.OnSubscribe<Object>() {
-                    @Override
-                    public void call(Subscriber<? super Object> subscriber) {
-
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe();
+//        Observable.create(
+//                new Observable.OnSubscribe<Object>() {
+//                    @Override
+//                    public void call(MySubscriber<? super Object> subscriber) {
+//
+//                    }
+//                })
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(Schedulers.io())
+//                .subscribe();
 
         DataKeeper keeper = new DataKeeper(this, "app");
         String uid = (String) keeper.get("uid");
@@ -145,7 +139,17 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
         RetrofitManager.getInstance().getFavoritesService()
                 .postBadQQ(badQQRequest)
                 .observeOn(Schedulers.io())
-                .subscribe();
+                .subscribe(new Action1<Object>() {
+                    @Override
+                    public void call(Object o) {
+
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Logger.d("on Error");
+                    }
+                });
     }
 
     protected void setListener() {

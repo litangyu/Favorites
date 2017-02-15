@@ -37,6 +37,13 @@ public class AuthorizationUtil {
         return EncoderByMd5(randomString + timeMD5);
     }
 
+    /**
+     * 将字符串以MD5方式编码加密
+     * @param str 要编码的字符串
+     * @return 加密后的字符串
+     * @throws NoSuchAlgorithmException
+     * @throws UnsupportedEncodingException
+     */
     public static String EncoderByMd5(String str) throws NoSuchAlgorithmException,
             UnsupportedEncodingException {
         //加密后的字符串
@@ -52,6 +59,11 @@ public class AuthorizationUtil {
         return sb.toString();
     }
 
+    /**
+     * 获取一个随机字符串
+     * @param length 生成字符串的长度
+     * @return 随机字符串
+     */
     @NonNull
     public static String getRandomString(int length) {
         //length表示生成字符串的长度

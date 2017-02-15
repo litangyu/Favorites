@@ -9,10 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import com.acg233.favorites.App;
 import com.acg233.favorites.R;
 import com.acg233.favorites.bean.BaseRequest;
-import com.acg233.favorites.bean.DownloadResponse;
 import com.acg233.favorites.network.FavoritesService;
+import com.acg233.favorites.network.MySubscriber;
 import com.acg233.favorites.utils.AuthorizationUtil;
-import com.acg233.favorites.utils.RetrofitManager;
+import com.acg233.favorites.network.RetrofitManager;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
@@ -26,7 +26,6 @@ import me.lty.basemvplibrary.utils.DataKeeper;
 import me.lty.basemvplibrary.utils.FileUtils;
 import okhttp3.ResponseBody;
 import rx.Observable;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -53,12 +52,12 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
+        keeper = new DataKeeper(this, "app");
         Observable.timer(3, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Long>() {
                     @Override
-                    public void call(Long aLong) {
+                    public void call(Long seconds) {
                         if (!keeper.get("isLogin", false)) {
                             //用户未登录
                             startActivity(new Intent(SplashActivity.this, LoginActivity.class));
@@ -77,9 +76,9 @@ public class SplashActivity extends AppCompatActivity {
         favoritesService = RetrofitManager.getInstance().getFavoritesService();
         favoritesService.getTime()
                 .observeOn(Schedulers.io())
-                .flatMap(new Func1<Long, Observable<Object>>() {
+                .flatMap(new Func1<Long, Observable<?>>() {
                     @Override
-                    public Observable<Object> call(Long time) {
+                    public Observable<?> call(Long time) {
                         //创建令牌
                         keeper = new DataKeeper(App.context(), "app");
                         try {
@@ -102,12 +101,13 @@ public class SplashActivity extends AppCompatActivity {
                         return favoritesService.checkVersion(baseRequest);
                     }
                 })
-                .subscribe(new Action1<Integer>() {
+                .flatMap(new Func1<Integer, Observable<InputStream>>() {
                     @Override
-                    public void call(Integer integer) {
-                        if (integer != 1) {
+                    public Observable<InputStream> call(Integer isNewVersion) {
+                        if (isNewVersion != 1) {
                             //强制更新
-                            favoritesService.download("http://www.baidu.com")
+                            return favoritesService.download("")
+                                    .unsubscribeOn(Schedulers.io())
                                     .unsubscribeOn(Schedulers.io())
                                     .map(new Func1<ResponseBody, InputStream>() {
                                         @Override
@@ -120,8 +120,10 @@ public class SplashActivity extends AppCompatActivity {
                                         @Override
                                         public void call(InputStream inputStream) {
                                             try {
-                                                File outputFile = new File(Environment.getExternalStoragePublicDirectory
-                                                        (Environment.DIRECTORY_DOWNLOADS), "Favorites.apk");
+                                                File outputFile = new File(Environment
+                                                        .getExternalStoragePublicDirectory
+                                                                (Environment.DIRECTORY_DOWNLOADS),
+                                                        "Favorites.apk");
                                                 FileUtils.writeFile(inputStream, outputFile);
                                             } catch (IOException e) {
                                                 e.printStackTrace();
@@ -129,36 +131,17 @@ public class SplashActivity extends AppCompatActivity {
                                             }
                                         }
                                     })
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(new Subscriber<InputStream>() {
-                                        @Override
-                                        public void onCompleted() {
-//                                            DownloadResponse download = new DownloadResponse();
-//                                            download.setProgress(100);
-//                                            sendIntent(download);
-//
-//                                            notificationManager.cancel(0);
-//                                            notificationBuilder.setProgress(0, 0, false);
-//                                            notificationBuilder.setContentText("File Downloaded");
-//                                            notificationManager.notify(0, notificationBuilder
-//                                                    .build());
-                                        }
-
-                                        @Override
-                                        public void onError(Throwable e) {
-                                            e.printStackTrace();
-//                                            downloadCompleted();
-//                                            Log.e(TAG, "onError: " + e.getMessage());
-                                        }
-
-                                        @Override
-                                        public void onNext(InputStream inputStream) {
-
-                                        }
-                                    });
+                                    .observeOn(AndroidSchedulers.mainThread());
                         } else {
                             finish();
+                            return null;
                         }
+                    }
+                })
+                .subscribe(new MySubscriber<InputStream>() {
+                    @Override
+                    public void onNext(InputStream inputStream) {
+
                     }
                 });
     }
@@ -177,4 +160,8 @@ public class SplashActivity extends AppCompatActivity {
         MobclickAgent.onPause(this);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

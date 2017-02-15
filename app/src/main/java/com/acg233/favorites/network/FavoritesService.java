@@ -27,25 +27,25 @@ import rx.Observable;
  */
 
 public interface FavoritesService {
-    @GET("time")
+    @GET("?type=time")
     Observable<Long> getTime();
 
-    @GET("date")
+    @GET("?type=date")
     Observable<String> getDate();
 
-    @POST("permission")
+    @POST("?type=permission")
     Observable<Object> postToken();
 
-    @POST("version")
+    @POST("?type=version")
     Observable<Integer> checkVersion(@Body BaseRequest request);
 
     @GET("download")
     @Streaming  //@Streaming作用为在下载大文件中使用。添加了该注解后，下载文件不会将所有的下载内容加载到内存
     Observable<ResponseBody> download(@Url String url);
 
-    @POST("login")
+    @POST("?type=login")
     Observable<UserResponse> login(@Body LoginRequest loginRequest);
 
-    @POST("badqq")
+    @POST("?type=badqq")
     Observable<Object> postBadQQ(@Body BadQQRequest badQQRequest);
 }

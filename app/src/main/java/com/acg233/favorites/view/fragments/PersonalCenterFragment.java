@@ -73,18 +73,20 @@ public class PersonalCenterFragment extends BaseFragment<PersonalCenterPresenter
 
     @Override
     protected void initData() {
-        UserResponse user = (UserResponse) getArguments().get("user");
+        if (getArguments() !=null) {
+            UserResponse user = (UserResponse) getArguments().get("user");
 
-        mTv_nick_name.setText(user.getNickName());
-        switchLevel(user.getUserLevel());
-        mTv_integral.setText(String.format("积分：%1$s", user.getIntegral()));
-        mTv_experience.setText(String.format("经验：%1$s", user.getExperience()));
+            mTv_nick_name.setText(user.getNickName());
+            switchLevel(user.getUserLevel());
+            mTv_integral.setText(String.format("积分：%1$s", user.getIntegral()));
+            mTv_experience.setText(String.format("经验：%1$s", user.getExperience()));
 
-        //                "https://gss0.baidu
-        // .com/94o3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item
-        // /f3d3572c11dfa9ece297da446ad0f703918fc12c.jpg"
-        Uri uri = Uri.parse(user.getHeadImgUrl());
-        mSdv_head_img.setImageURI(uri);
+            //                "https://gss0.baidu
+            // .com/94o3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item
+            // /f3d3572c11dfa9ece297da446ad0f703918fc12c.jpg"
+            Uri uri = Uri.parse(user.getHeadImgUrl());
+            mSdv_head_img.setImageURI(uri);
+        }
     }
 
     private void switchLevel(int level) {

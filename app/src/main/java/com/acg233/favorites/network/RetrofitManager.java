@@ -1,7 +1,6 @@
-package com.acg233.favorites.utils;
+package com.acg233.favorites.network;
 
 import com.acg233.favorites.App;
-import com.acg233.favorites.network.FavoritesService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -50,11 +49,12 @@ public class RetrofitManager {
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(App.BASE_URL)
+                .baseUrl(App.HOST)
                 .client(okHttpClient)
                 //配置网络请求默认在IO线程执行
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                //字符串转换器
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
         favoritesService = retrofit.create(FavoritesService.class);

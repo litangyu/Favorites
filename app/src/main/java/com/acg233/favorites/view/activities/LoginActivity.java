@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,8 +31,9 @@ import com.acg233.favorites.bean.LoginRequest;
 import com.acg233.favorites.bean.UserResponse;
 import com.acg233.favorites.presenter.LoginPresenterImpl;
 import com.acg233.favorites.utils.RegexUtil;
-import com.acg233.favorites.utils.RetrofitManager;
+import com.acg233.favorites.network.RetrofitManager;
 import com.acg233.favorites.view.impl.LoginView;
+import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -267,14 +267,20 @@ public class LoginActivity extends BaseActivity<LoginPresenterImpl> implements L
                         @Override
                         public void call(UserResponse userResponse) {
                             DataKeeper keeper = new DataKeeper(LoginActivity.this, "app");
-                            keeper.put("uid",userResponse.getUsername());
-                            keeper.put("isLogin",true);
+                            keeper.put("uid", userResponse.getUsername());
+                            keeper.put("isLogin", true);
 
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("user", userResponse);
                             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                             intent.putExtras(bundle);
                             startActivity(intent);
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+                            Logger.d("on Error");
+                            throwable.printStackTrace();
                         }
                     });
         }

@@ -22,7 +22,7 @@ public class App extends MultiDexApplication {
     private static App mInstance;
 
     public static boolean DEBUG = true;
-    public static String BASE_URL = "http://acg233.com/api/?type=";
+    public static String HOST = "http://acg233.com/";
     public static int ReadTimeOut = 10;
     public static int WriteTimeOut = 10;
     public static int ConnectTimeOut = 15;

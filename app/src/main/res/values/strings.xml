@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">里番收藏夹</string>
+    <string name="app_name_zh">里番收藏夹</string>
     <string name="app_name_en">Favorites</string>
+    <string name="about_zh">关于里番收藏夹</string>
+    <string name="about_en">About Favorites</string>
     <string name="copy_right">Copyright © 2015 - 2017 里番收藏夹Android客户端 All Rights Reserved</string>
     <!--<string name="app_name">Favorites</string>-->
     <string name="modify_pwd">修改密码</string>
