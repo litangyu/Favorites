@@ -27,12 +27,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.acg233.favorites.R;
-import com.acg233.favorites.bean.LoginRequest;
-import com.acg233.favorites.bean.UserResponse;
+import com.acg233.favorites.api.RetrofitManager;
+import com.acg233.favorites.api.type.Login;
+import com.acg233.favorites.api.type.User;
+import com.acg233.favorites.contract.LoginContract;
 import com.acg233.favorites.presenter.LoginPresenterImpl;
-import com.acg233.favorites.utils.RegexUtil;
-import com.acg233.favorites.network.RetrofitManager;
-import com.acg233.favorites.view.impl.LoginView;
+import com.acg233.favorites.tool.ErrorHandler;
+import com.acg233.favorites.tool.RegexUtil;
 import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
@@ -48,12 +49,11 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
 import static android.Manifest.permission.READ_CONTACTS;
-import static me.lty.basemvplibrary.utils.Check.isEmpty;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends BaseActivity<LoginPresenterImpl> implements LoginView,
+public class LoginActivity extends BaseActivity implements LoginContract.View,
         LoaderCallbacks<Cursor> {
 
     /**
@@ -78,11 +78,7 @@ public class LoginActivity extends BaseActivity<LoginPresenterImpl> implements L
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-
-    @Override
-    protected LoginPresenterImpl initPresenter() {
-        return new LoginPresenterImpl(this);
-    }
+    private LoginPresenterImpl mPresenter;
 
     @Override
     protected int initContentView() {
@@ -127,17 +123,17 @@ public class LoginActivity extends BaseActivity<LoginPresenterImpl> implements L
     }
 
     @Override
+    public void setPresenter(LoginContract.Presenter presenter) {
+        mPresenter = (LoginPresenterImpl) presenter;
+    }
+
+    @Override
     protected void initData() {
 
     }
 
     @Override
     protected void setListener() {
-
-    }
-
-    @Override
-    public void onClick(View v) {
 
     }
 
@@ -259,13 +255,13 @@ public class LoginActivity extends BaseActivity<LoginPresenterImpl> implements L
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
 
-            LoginRequest loginRequest = new LoginRequest(email, password);
+            Login loginRequest = new Login(email, password);
             RetrofitManager.getInstance().getFavoritesService()
                     .login(loginRequest)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action1<UserResponse>() {
+                    .subscribe(new Action1<User>() {
                         @Override
-                        public void call(UserResponse userResponse) {
+                        public void call(User userResponse) {
                             DataKeeper keeper = new DataKeeper(LoginActivity.this, "app");
                             keeper.put("uid", userResponse.getUsername());
                             keeper.put("isLogin", true);
@@ -276,13 +272,7 @@ public class LoginActivity extends BaseActivity<LoginPresenterImpl> implements L
                             intent.putExtras(bundle);
                             startActivity(intent);
                         }
-                    }, new Action1<Throwable>() {
-                        @Override
-                        public void call(Throwable throwable) {
-                            Logger.d("on Error");
-                            throwable.printStackTrace();
-                        }
-                    });
+                    }, ErrorHandler.displayErrorAction(LoginActivity.this));
         }
     }
 

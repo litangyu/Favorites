@@ -1,6 +1,5 @@
 package me.lty.basemvplibrary.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,9 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import me.lty.basemvplibrary.base.AppBasePresenter;
-import me.lty.basemvplibrary.base.Contract;
-
 /**
  * 描述
  * <p>Version: v1.0</p>
@@ -23,14 +19,11 @@ import me.lty.basemvplibrary.base.Contract;
  * <p>Copyright © 2016年 litangyu. All rights reserved.</p>
  * <p>Revision：</p>
  */
-public abstract class BaseLazyLoadFragment<T extends AppBasePresenter> extends Fragment
-        implements Contract.BaseView ,android.view.View.OnClickListener{
+public abstract class BaseLazyLoadFragment extends Fragment {
 
     private static final String STATE_SAVE_IS_HIDDEN = "STATE_SAVE_IS_HIDDEN";
     protected Context mContext = null;
 //    protected BaseFragment.OnFragmentInteractionListener mListener;
-
-    protected T mPresenter;
 
     private View rootView;
 
@@ -108,12 +101,6 @@ public abstract class BaseLazyLoadFragment<T extends AppBasePresenter> extends F
         lazyLoad();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mPresenter.attachView(this);
-    }
-
     protected void lazyLoad() {
         if (!isPrepared || !isVisible || !isFirstLoad) {
             return;
@@ -122,24 +109,7 @@ public abstract class BaseLazyLoadFragment<T extends AppBasePresenter> extends F
         initData();
     }
 
-    @Override
-    public void hideView(android.view.View view) {
-        view.setVisibility(android.view.View.INVISIBLE);
-    }
-
-    @Override
-    public void showView(android.view.View view) {
-        view.setVisibility(android.view.View.VISIBLE);
-    }
-
-    @Override
-    public void disappearView(android.view.View view) {
-        view.setVisibility(android.view.View.GONE);
-    }
-
     protected abstract int getContentViewLayoutID();
-
-    protected abstract T initPresenter();
 
     protected abstract void bindView(View view);
 
@@ -149,5 +119,4 @@ public abstract class BaseLazyLoadFragment<T extends AppBasePresenter> extends F
 
     protected abstract void setListener();
 
-    public abstract View getLoadingTargetView();
 }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.acg233.favorites.R;
+import com.acg233.favorites.contract.NewsDetailContract;
 import com.acg233.favorites.presenter.NewsDetailPresenterImpl;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.umeng.analytics.MobclickAgent;
@@ -26,7 +27,7 @@ import me.lty.basemvplibrary.ui.BaseActivity;
  * <p>Revision：</p>
  */
 
-public class NewsDetailActivity extends BaseActivity<NewsDetailPresenterImpl> {
+public class NewsDetailActivity extends BaseActivity implements NewsDetailContract.View {
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
@@ -35,11 +36,7 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailPresenterImpl> {
     @BindView(R.id.backdrop)
     protected SimpleDraweeView mBackdrop;
 
-
-    @Override
-    protected NewsDetailPresenterImpl initPresenter() {
-        return new NewsDetailPresenterImpl(this);
-    }
+    private NewsDetailPresenterImpl mPresenter;
 
     @Override
     protected int initContentView() {
@@ -67,6 +64,11 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailPresenterImpl> {
     }
 
     @Override
+    public void setPresenter(NewsDetailContract.Presenter presenter) {
+        mPresenter = (NewsDetailPresenterImpl) presenter;
+    }
+
+    @Override
     protected void initData() {
         mTv_text.setText("012 [12月]2016年12月里番合集\n" +
                 "magnet:?xt=urn:btih:9150B382EE3D301094CCB80B2DACA7BAB1101DAE");
@@ -79,11 +81,6 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailPresenterImpl> {
 
     @Override
     protected void setListener() {
-
-    }
-
-    @Override
-    public void onClick(View v) {
 
     }
 

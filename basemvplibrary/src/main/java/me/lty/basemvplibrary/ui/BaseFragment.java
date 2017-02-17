@@ -1,6 +1,5 @@
 package me.lty.basemvplibrary.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +13,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import me.lty.basemvplibrary.base.AppBasePresenter;
-import me.lty.basemvplibrary.base.Contract;
+import me.lty.basemvplibrary.base.BasePresenter;
+import me.lty.basemvplibrary.base.BaseView;
 
 /**
  * 描述
@@ -26,14 +25,10 @@ import me.lty.basemvplibrary.base.Contract;
  * <p>Copyright © 2016年 litangyu. All rights reserved.</p>
  * <p>Revision：</p>
  */
-public abstract class BaseFragment<T extends AppBasePresenter> extends Fragment implements
-        Contract.BaseView, View.OnClickListener {
+public abstract class BaseFragment extends Fragment {
 
     private static final String STATE_SAVE_IS_HIDDEN = "STATE_SAVE_IS_HIDDEN";
     protected Context mContext = null;
-//    protected OnFragmentInteractionListener mListener;
-
-    protected T mPresenter;
 
     private View rootView;
 
@@ -98,13 +93,6 @@ public abstract class BaseFragment<T extends AppBasePresenter> extends Fragment 
 
     protected abstract int getContentViewLayoutID();
 
-    /**
-     * 初始化Presenter
-     *
-     * @return Presenter实现类
-     */
-    protected abstract T initPresenter();
-
     protected abstract void bindView(View view);
 
     protected abstract void initView(View view);
@@ -113,28 +101,10 @@ public abstract class BaseFragment<T extends AppBasePresenter> extends Fragment 
 
     protected abstract void setListener();
 
-    public abstract View getLoadingTargetView();
-
-    @Override
-    public Context getContext() {
-        return null;
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(STATE_SAVE_IS_HIDDEN, isHidden());
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-//        mListener = null;
     }
 
 
@@ -158,28 +128,6 @@ public abstract class BaseFragment<T extends AppBasePresenter> extends Fragment 
         if (null != bundle)
             intent.putExtras(bundle);
         startActivityForResult(intent, requestCode);
-    }
-
-    /**
-     * 隐藏控件
-     */
-    @Override
-    public void hideView(View v) {
-        v.setVisibility(View.GONE);
-    }
-
-    /**
-     * 显示控件
-     */
-    @Override
-    public void showView(View v) {
-        v.setVisibility(View.VISIBLE);
-    }
-
-
-    @Override
-    public void disappearView(View view) {
-        view.setVisibility(android.view.View.GONE);
     }
 
     /**

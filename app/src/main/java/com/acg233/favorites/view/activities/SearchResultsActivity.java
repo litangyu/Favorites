@@ -4,10 +4,11 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import com.acg233.favorites.contract.HomeContract;
+import com.acg233.favorites.contract.SearchResultsContract;
 import com.acg233.favorites.presenter.SearchResultsPresenterImpl;
 import com.umeng.analytics.MobclickAgent;
 
@@ -23,12 +24,9 @@ import me.lty.basemvplibrary.ui.BaseActivity;
  * <p>Revision：</p>
  */
 
-public class SearchResultsActivity extends BaseActivity<SearchResultsPresenterImpl> {
+public class SearchResultsActivity extends BaseActivity implements SearchResultsContract.View {
 
-    @Override
-    protected SearchResultsPresenterImpl initPresenter() {
-        return new SearchResultsPresenterImpl(this);
-    }
+    private SearchResultsPresenterImpl mPresenter;
 
     @Override
     protected int initContentView() {
@@ -46,6 +44,11 @@ public class SearchResultsActivity extends BaseActivity<SearchResultsPresenterIm
     }
 
     @Override
+    public void setPresenter(SearchResultsContract.Presenter presenter) {
+        mPresenter = (SearchResultsPresenterImpl) presenter;
+    }
+
+    @Override
     protected void initData() {
         getQueryExtra();
     }
@@ -53,16 +56,6 @@ public class SearchResultsActivity extends BaseActivity<SearchResultsPresenterIm
     @Override
     protected void setListener() {
 
-    }
-
-    @Override
-    public void onClick(View v) {
-
-    }
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 
     private void getQueryExtra() {

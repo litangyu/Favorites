@@ -1,10 +1,9 @@
 package com.acg233.favorites.presenter;
 
-import android.content.Context;
+import android.support.annotation.NonNull;
 
-import com.acg233.favorites.view.impl.LoginView;
-
-import me.lty.basemvplibrary.base.AppBasePresenter;
+import com.acg233.favorites.contract.HomeContract;
+import com.acg233.favorites.contract.LoginContract;
 
 /**
  * Describe
@@ -16,14 +15,14 @@ import me.lty.basemvplibrary.base.AppBasePresenter;
  * <p>Revision：</p>
  */
 
-public class LoginPresenterImpl extends AppBasePresenter<LoginView> {
+public class LoginPresenterImpl implements LoginContract.Presenter {
 
-    public LoginPresenterImpl(Context context) {
-        super(context);
+    public LoginPresenterImpl(@NonNull LoginContract.View loginView) {
+        loginView.setPresenter(this);
     }
 
     @Override
-    public void initialized(Context context) {
+    public void start() {
 
     }
 }

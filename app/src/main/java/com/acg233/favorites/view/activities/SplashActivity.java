@@ -8,11 +8,11 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.acg233.favorites.App;
 import com.acg233.favorites.R;
-import com.acg233.favorites.bean.BaseRequest;
-import com.acg233.favorites.network.FavoritesService;
-import com.acg233.favorites.network.MySubscriber;
-import com.acg233.favorites.utils.AuthorizationUtil;
-import com.acg233.favorites.network.RetrofitManager;
+import com.acg233.favorites.api.FavoritesService;
+import com.acg233.favorites.api.RetrofitManager;
+import com.acg233.favorites.api.type.BaseRequest;
+import com.acg233.favorites.tool.AuthorizationUtil;
+import com.acg233.favorites.tool.ErrorHandler;
 import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
@@ -66,7 +66,7 @@ public class SplashActivity extends AppCompatActivity {
                         }
                     }
                 });
-        actionStart();
+//        actionStart();
     }
 
     /**
@@ -138,12 +138,12 @@ public class SplashActivity extends AppCompatActivity {
                         }
                     }
                 })
-                .subscribe(new MySubscriber<InputStream>() {
+                .subscribe(new Action1<InputStream>() {
                     @Override
-                    public void onNext(InputStream inputStream) {
+                    public void call(InputStream inputStream) {
 
                     }
-                });
+                }, ErrorHandler.displayErrorAction(SplashActivity.this));
     }
 
     @Override

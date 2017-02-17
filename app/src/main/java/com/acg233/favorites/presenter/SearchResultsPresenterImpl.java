@@ -1,10 +1,8 @@
 package com.acg233.favorites.presenter;
 
-import android.content.Context;
+import android.support.annotation.NonNull;
 
-import com.acg233.favorites.view.impl.SearchResultsView;
-
-import me.lty.basemvplibrary.base.AppBasePresenter;
+import com.acg233.favorites.contract.SearchResultsContract;
 
 /**
  * Describe
@@ -16,14 +14,14 @@ import me.lty.basemvplibrary.base.AppBasePresenter;
  * <p>Revision：</p>
  */
 
-public class SearchResultsPresenterImpl extends AppBasePresenter<SearchResultsView> {
+public class SearchResultsPresenterImpl implements SearchResultsContract.Presenter {
 
-    public SearchResultsPresenterImpl(Context context) {
-        super(context);
+    public SearchResultsPresenterImpl(@NonNull SearchResultsContract.View searchResultsView) {
+        searchResultsView.setPresenter(this);
     }
 
     @Override
-    public void initialized(Context context) {
+    public void start() {
 
     }
 }

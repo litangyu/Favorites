@@ -1,10 +1,9 @@
 package com.acg233.favorites.presenter;
 
-import android.content.Context;
+import android.support.annotation.NonNull;
 
-import com.acg233.favorites.view.impl.MyFavoritesView;
-
-import me.lty.basemvplibrary.base.AppBasePresenter;
+import com.acg233.favorites.contract.LoginContract;
+import com.acg233.favorites.contract.MyFavoritesContract;
 
 /**
  * Describe
@@ -16,14 +15,14 @@ import me.lty.basemvplibrary.base.AppBasePresenter;
  * <p>Revision：</p>
  */
 
-public class MyFavoritesPresenterImpl extends AppBasePresenter<MyFavoritesView> {
+public class MyFavoritesPresenterImpl implements MyFavoritesContract.Presenter {
 
-    public MyFavoritesPresenterImpl(Context context) {
-        super(context);
+    public MyFavoritesPresenterImpl(@NonNull MyFavoritesContract.View myFavoritesView) {
+        myFavoritesView.setPresenter(this);
     }
 
     @Override
-    public void initialized(Context context) {
+    public void start() {
 
     }
 }

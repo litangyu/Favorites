@@ -1,22 +1,16 @@
 package com.acg233.favorites.view.fragments;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.view.GravityCompat;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.acg233.favorites.R;
-import com.acg233.favorites.bean.UserResponse;
+import com.acg233.favorites.api.type.User;
+import com.acg233.favorites.contract.HomeContract;
 import com.acg233.favorites.presenter.HomePresenterImpl;
-import com.acg233.favorites.presenter.PersonalCenterPresenterImpl;
+import com.acg233.favorites.tool.ResourceHelper;
 import com.acg233.favorites.view.activities.LoginActivity;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.umeng.analytics.MobclickAgent;
@@ -25,7 +19,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.lty.basemvplibrary.ui.BaseFragment;
-import me.lty.basemvplibrary.ui.BaseLazyLoadFragment;
 
 
 /**
@@ -38,7 +31,7 @@ import me.lty.basemvplibrary.ui.BaseLazyLoadFragment;
  * <p>Revision：</p>
  */
 
-public class PersonalCenterFragment extends BaseFragment<PersonalCenterPresenterImpl> {
+public class PersonalCenterFragment extends BaseFragment implements HomeContract.View {
 
     @BindView(R.id.sdv_head_img)
     protected SimpleDraweeView mSdv_head_img;
@@ -51,14 +44,11 @@ public class PersonalCenterFragment extends BaseFragment<PersonalCenterPresenter
     @BindView(R.id.tv_integral)
     protected TextView mTv_integral;
 
+    private HomePresenterImpl mPresenter;
+
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.fragment_personal_center;
-    }
-
-    @Override
-    protected PersonalCenterPresenterImpl initPresenter() {
-        return new PersonalCenterPresenterImpl(getActivity());
     }
 
     @Override
@@ -72,12 +62,17 @@ public class PersonalCenterFragment extends BaseFragment<PersonalCenterPresenter
     }
 
     @Override
+    public void setPresenter(HomeContract.Presenter presenter) {
+        mPresenter = (HomePresenterImpl) presenter;
+    }
+
+    @Override
     protected void initData() {
-        if (getArguments() !=null) {
-            UserResponse user = (UserResponse) getArguments().get("user");
+        if (getArguments() != null) {
+            User user = (User) getArguments().get("user");
 
             mTv_nick_name.setText(user.getNickName());
-            switchLevel(user.getUserLevel());
+            ResourceHelper.switchLevel(mImv_level,user.getUserLevel());
             mTv_integral.setText(String.format("积分：%1$s", user.getIntegral()));
             mTv_experience.setText(String.format("经验：%1$s", user.getExperience()));
 
@@ -89,52 +84,11 @@ public class PersonalCenterFragment extends BaseFragment<PersonalCenterPresenter
         }
     }
 
-    private void switchLevel(int level) {
-        switch (level) {
-            case 0:
-                mImv_level.setImageResource(R.mipmap.ic_lv0);
-                break;
-            case 1:
-                mImv_level.setImageResource(R.mipmap.ic_lv1);
-                break;
-            case 2:
-                mImv_level.setImageResource(R.mipmap.ic_lv2);
-                break;
-            case 3:
-                mImv_level.setImageResource(R.mipmap.ic_lv3);
-                break;
-            case 4:
-                mImv_level.setImageResource(R.mipmap.ic_lv4);
-                break;
-            case 5:
-                mImv_level.setImageResource(R.mipmap.ic_lv5);
-                break;
-            case 6:
-                mImv_level.setImageResource(R.mipmap.ic_lv6);
-                break;
-            case 7:
-                mImv_level.setImageResource(R.mipmap.ic_lv7);
-                break;
-            case 8:
-                mImv_level.setImageResource(R.mipmap.ic_lv8);
-                break;
-            case 9:
-                mImv_level.setImageResource(R.mipmap.ic_lv9);
-                break;
-        }
-    }
-
     @Override
     protected void setListener() {
 
     }
 
-    @Override
-    public View getLoadingTargetView() {
-        return null;
-    }
-
-    @Override
     @OnClick({R.id.rl_favorites, R.id.rl_notify, R.id.rl_nick_name, R.id.rl_exchange, R.id
             .rl_invite_people, R.id.tv_modify_pwd, R.id.tv_log_off})
     public void onClick(View v) {
@@ -150,9 +104,6 @@ public class PersonalCenterFragment extends BaseFragment<PersonalCenterPresenter
             case R.id.rl_invite_people:
                 break;
             case R.id.tv_modify_pwd:
-                if (mPresenter.getDrawerLayout().isDrawerOpen(GravityCompat.START)) {
-                    mPresenter.getDrawerLayout().closeDrawer(GravityCompat.START);
-                }
                 break;
             case R.id.tv_log_off:
                 startActivity(new Intent(getActivity(), LoginActivity.class));

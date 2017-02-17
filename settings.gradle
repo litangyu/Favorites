@@ -1,1 +1,1 @@
-include ':app', ':basemvplibrary'
+include ':app', ':basemvplibrary', ':api'

@@ -17,18 +17,14 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.View;
 
 import com.acg233.favorites.R;
-import com.acg233.favorites.bean.BadQQRequest;
+import com.acg233.favorites.contract.HomeContract;
 import com.acg233.favorites.presenter.HomePresenterImpl;
-import com.acg233.favorites.network.RetrofitManager;
 import com.acg233.favorites.view.adapter.HomeFragmentAdapter;
 import com.acg233.favorites.view.fragments.HistoryFragment;
 import com.acg233.favorites.view.fragments.NewsFragment;
 import com.acg233.favorites.view.fragments.PersonalCenterFragment;
-import com.acg233.favorites.view.impl.HomeView;
-import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -37,11 +33,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.lty.basemvplibrary.utils.Check;
-import me.lty.basemvplibrary.utils.DataKeeper;
-import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import rx.Subscription;
 
 /**
  * Describe 首页
@@ -53,7 +45,7 @@ import rx.schedulers.Schedulers;
  * <p>Revision：</p>
  */
 
-public class HomeActivity extends AppCompatActivity implements HomeView {
+public class HomeActivity extends AppCompatActivity implements HomeContract.View {
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
@@ -68,6 +60,7 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
 
     private HomePresenterImpl mPresenter;
     private List<Fragment> mFragmentList = new ArrayList<>();
+    private Subscription mActionFourSubscription;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,7 +79,7 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     }
 
     protected void initView() {
-        mToolbar.setTitle(getString(R.string.app_name_en));
+        mToolbar.setTitle(getString(R.string.app_name));
         setSupportActionBar(mToolbar);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -102,9 +95,12 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
         toggle.syncState();
     }
 
-    protected void initData() {
-        mPresenter = new HomePresenterImpl(this);
+    @Override
+    public void setPresenter(HomeContract.Presenter presenter) {
+        mPresenter = (HomePresenterImpl) presenter;
+    }
 
+    protected void initData() {
         mTab_home.setTabMode(TabLayout.MODE_FIXED);
 
         mFragmentList.add(new NewsFragment());
@@ -115,41 +111,8 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
         }
         mTab_home.setupWithViewPager(mVp_home);
 
-        actionFour();
-    }
-
-    private void actionFour() {
-        //获取手机\Tencent\MobileQQ\artfilter\*.config 提取QQ号
-//        Observable.create(
-//                new Observable.OnSubscribe<Object>() {
-//                    @Override
-//                    public void call(MySubscriber<? super Object> subscriber) {
-//
-//                    }
-//                })
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(Schedulers.io())
-//                .subscribe();
-
-        DataKeeper keeper = new DataKeeper(this, "app");
-        String uid = (String) keeper.get("uid");
-        BadQQRequest badQQRequest = new BadQQRequest();
-        badQQRequest.setBad(uid);
-
-        RetrofitManager.getInstance().getFavoritesService()
-                .postBadQQ(badQQRequest)
-                .observeOn(Schedulers.io())
-                .subscribe(new Action1<Object>() {
-                    @Override
-                    public void call(Object o) {
-
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        Logger.d("on Error");
-                    }
-                });
+        mPresenter.start();
+        mActionFourSubscription = mPresenter.actionFour(this);
     }
 
     protected void setListener() {
@@ -174,26 +137,6 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     }
 
     @Override
-    public DrawerLayout getDrawerLayout() {
-        return mDrawerLayout;
-    }
-
-    @Override
-    public void showView(View view) {
-
-    }
-
-    @Override
-    public void hideView(View view) {
-
-    }
-
-    @Override
-    public void disappearView(View view) {
-
-    }
-
-    @Override
     public void onBackPressed() {
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
@@ -212,5 +155,11 @@ public class HomeActivity extends AppCompatActivity implements HomeView {
     protected void onPause() {
         super.onStop();
         MobclickAgent.onPause(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.mActionFourSubscription.unsubscribe();
     }
 }

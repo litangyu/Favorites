@@ -1,8 +1,6 @@
 <resources>
-    <string name="app_name_zh">里番收藏夹</string>
-    <string name="app_name_en">Favorites</string>
-    <string name="about_zh">关于里番收藏夹</string>
-    <string name="about_en">About Favorites</string>
+    <string name="app_name">里番收藏夹</string>
+    <string name="about">关于里番收藏夹</string>
     <string name="copy_right">Copyright © 2015 - 2017 里番收藏夹Android客户端 All Rights Reserved</string>
     <!--<string name="app_name">Favorites</string>-->
     <string name="modify_pwd">修改密码</string>
@@ -15,6 +13,9 @@
     <string name="search_title">搜索</string>
     <string name="search_hint">搜索番剧</string>
     <string name="title_activity_login">Sign in</string>
+
+    <!--tip-->
+    <string name="tip_network_is_not_available">网络未连接或不可用，请检查后重试</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">用户名或邮箱地址</string>

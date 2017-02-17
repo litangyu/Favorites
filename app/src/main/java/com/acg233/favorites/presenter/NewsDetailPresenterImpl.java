@@ -1,11 +1,8 @@
 package com.acg233.favorites.presenter;
 
-import android.content.Context;
+import android.support.annotation.NonNull;
 
-import com.acg233.favorites.view.impl.NewsDetailView;
-
-import me.lty.basemvplibrary.base.AppBasePresenter;
-import me.lty.basemvplibrary.base.View;
+import com.acg233.favorites.contract.NewsDetailContract;
 
 /**
  * Describe
@@ -17,14 +14,14 @@ import me.lty.basemvplibrary.base.View;
  * <p>Revision：</p>
  */
 
-public class NewsDetailPresenterImpl extends AppBasePresenter<NewsDetailView> {
+public class NewsDetailPresenterImpl implements NewsDetailContract.Presenter {
 
-    public NewsDetailPresenterImpl(Context context) {
-        super(context);
+    public NewsDetailPresenterImpl(@NonNull NewsDetailContract.View newsDetailView) {
+        newsDetailView.setPresenter(this);
     }
 
     @Override
-    public void initialized(Context context) {
+    public void start() {
 
     }
 }

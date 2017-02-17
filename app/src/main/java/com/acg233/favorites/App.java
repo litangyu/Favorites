@@ -21,11 +21,7 @@ public class App extends MultiDexApplication {
 
     private static App mInstance;
 
-    public static boolean DEBUG = true;
-    public static String HOST = "http://acg233.com/";
-    public static int ReadTimeOut = 10;
-    public static int WriteTimeOut = 10;
-    public static int ConnectTimeOut = 15;
+    public static boolean DEBUG = false;
 
     @Override
     public void onCreate() {

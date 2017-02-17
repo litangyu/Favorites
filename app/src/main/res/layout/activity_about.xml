@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/color_E0678C"
-        app:title="@string/about_zh"
+        app:title="@string/about"
         app:titleTextColor="@color/black">
     </android.support.v7.widget.Toolbar>
 

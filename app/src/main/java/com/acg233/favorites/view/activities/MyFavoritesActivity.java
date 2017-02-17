@@ -1,8 +1,6 @@
 package com.acg233.favorites.view.activities;
 
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-
+import com.acg233.favorites.contract.MyFavoritesContract;
 import com.acg233.favorites.presenter.MyFavoritesPresenterImpl;
 import com.umeng.analytics.MobclickAgent;
 
@@ -18,14 +16,9 @@ import me.lty.basemvplibrary.ui.BaseActivity;
  * <p>Revision：</p>
  */
 
-public class MyFavoritesActivity extends BaseActivity<MyFavoritesPresenterImpl> {
+public class MyFavoritesActivity extends BaseActivity implements MyFavoritesContract.View {
 
-
-
-    @Override
-    protected MyFavoritesPresenterImpl initPresenter() {
-        return null;
-    }
+    private MyFavoritesPresenterImpl mPresenter;
 
     @Override
     protected int initContentView() {
@@ -43,17 +36,17 @@ public class MyFavoritesActivity extends BaseActivity<MyFavoritesPresenterImpl> 
     }
 
     @Override
+    public void setPresenter(MyFavoritesContract.Presenter presenter) {
+        mPresenter = (MyFavoritesPresenterImpl) presenter;
+    }
+
+    @Override
     protected void initData() {
 
     }
 
     @Override
     protected void setListener() {
-
-    }
-
-    @Override
-    public void onClick(View v) {
 
     }
 

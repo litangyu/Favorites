@@ -9,6 +9,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
 import com.acg233.favorites.R;
+import com.acg233.favorites.contract.HomeContract;
 import com.acg233.favorites.presenter.HomePresenterImpl;
 import com.acg233.favorites.view.adapter.ItemViewProvider.FavoritesItemViewProvider;
 import com.acg233.favorites.view.adapter.item.FavoritesItem;
@@ -30,21 +31,18 @@ import me.lty.basemvplibrary.ui.BaseFragment;
  * <p>Revision：</p>
  */
 
-public class NewsFragment extends BaseFragment<HomePresenterImpl> {
+public class NewsFragment extends BaseFragment implements HomeContract.View {
 
     @BindView(R.id.swipe_refresh)
     protected SwipeRefreshLayout mSwipeRefresh;
     @BindView(R.id.rv_news)
     protected RecyclerView mRv_news;
 
+    private HomePresenterImpl mPresenter;
+
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.fragment_news;
-    }
-
-    @Override
-    protected HomePresenterImpl initPresenter() {
-        return null;
     }
 
     @Override
@@ -78,6 +76,11 @@ public class NewsFragment extends BaseFragment<HomePresenterImpl> {
     }
 
     @Override
+    public void setPresenter(HomeContract.Presenter presenter) {
+        mPresenter = (HomePresenterImpl) presenter;
+    }
+
+    @Override
     protected void initData() {
         MultiTypeAdapter adapter = new MultiTypeAdapter();
         FavoritesItemViewProvider favoritesItemViewProvider = new FavoritesItemViewProvider(getActivity());
@@ -95,16 +98,6 @@ public class NewsFragment extends BaseFragment<HomePresenterImpl> {
     @Override
     protected void setListener() {
 
-    }
-
-    @Override
-    public void onClick(View v) {
-
-    }
-
-    @Override
-    public View getLoadingTargetView() {
-        return null;
     }
 
     @Override

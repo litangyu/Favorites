@@ -6,9 +6,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.acg233.favorites.R;
+import com.acg233.favorites.contract.HomeContract;
 import com.acg233.favorites.presenter.HomePresenterImpl;
 import com.acg233.favorites.view.adapter.ItemViewProvider.HistoryItemViewProvider;
-import com.acg233.favorites.view.adapter.item.FavoritesItem;
 import com.acg233.favorites.view.adapter.item.HistoryItem;
 import com.umeng.analytics.MobclickAgent;
 
@@ -28,19 +28,16 @@ import me.lty.basemvplibrary.ui.BaseFragment;
  * <p>Revision：</p>
  */
 
-public class HistoryFragment extends BaseFragment<HomePresenterImpl> {
+public class HistoryFragment extends BaseFragment implements HomeContract.View{
 
     @BindView(R.id.rv_history)
     protected RecyclerView mRv_history;
 
+    private HomePresenterImpl mPresenter;
+
     @Override
     protected int getContentViewLayoutID() {
         return R.layout.fragment_history;
-    }
-
-    @Override
-    protected HomePresenterImpl initPresenter() {
-        return null;
     }
 
     @Override
@@ -53,6 +50,11 @@ public class HistoryFragment extends BaseFragment<HomePresenterImpl> {
         mRv_history.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRv_history.setHasFixedSize(true);
         mRv_history.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    @Override
+    public void setPresenter(HomeContract.Presenter presenter) {
+        mPresenter = (HomePresenterImpl) presenter;
     }
 
     @Override
@@ -71,16 +73,6 @@ public class HistoryFragment extends BaseFragment<HomePresenterImpl> {
 
     @Override
     protected void setListener() {
-
-    }
-
-    @Override
-    public View getLoadingTargetView() {
-        return null;
-    }
-
-    @Override
-    public void onClick(View v) {
 
     }
 

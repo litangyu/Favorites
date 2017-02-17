@@ -5,16 +5,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import me.lty.basemvplibrary.R;
-import me.lty.basemvplibrary.base.AppBasePresenter;
+import me.lty.basemvplibrary.base.BasePresenter;
 import me.lty.basemvplibrary.base.AppRuntimeException.LayoutResIDException;
-import me.lty.basemvplibrary.base.Contract;
+import me.lty.basemvplibrary.base.BaseView;
 
 /**
  * 描述
@@ -26,19 +24,13 @@ import me.lty.basemvplibrary.base.Contract;
  * <p>Copyright © 2016年 litangyu. All rights reserved.</p>
  * <p>Revision：</p>
  */
-public abstract class BaseActivity<T extends AppBasePresenter> extends
-        AppCompatActivity implements Contract.BaseView, android.view.View.OnClickListener {
-
-    protected T mPresenter;
+public abstract class BaseActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mPresenter = initPresenter();
-
         setTransparentStatusBar();
-
         int layoutResID = initContentView();
         if (layoutResID == 0) {
             throw new LayoutResIDException();
@@ -69,13 +61,6 @@ public abstract class BaseActivity<T extends AppBasePresenter> extends
     }
 
     /**
-     * 初始化Presenter
-     *
-     * @return Presenter实现类
-     */
-    protected abstract T initPresenter();
-
-    /**
      * 设置布局文件
      *
      * @return layout ID
@@ -101,53 +86,6 @@ public abstract class BaseActivity<T extends AppBasePresenter> extends
      * 设置监听
      */
     protected abstract void setListener();
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mPresenter.attachView(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mPresenter.detachView();
-    }
-
-    @Override
-    public void hideView(android.view.View view) {
-        view.setVisibility(android.view.View.INVISIBLE);
-    }
-
-    @Override
-    public void showView(android.view.View view) {
-        view.setVisibility(android.view.View.VISIBLE);
-    }
-
-    @Override
-    public void disappearView(android.view.View view) {
-        view.setVisibility(android.view.View.GONE);
-    }
 
     /**
      * 显示键盘

@@ -1,10 +1,27 @@
 package com.acg233.favorites.presenter;
 
 import android.content.Context;
+import android.os.Environment;
+import android.support.annotation.NonNull;
 
-import com.acg233.favorites.view.impl.HomeView;
+import com.acg233.favorites.api.RetrofitManager;
+import com.acg233.favorites.api.type.BadQQ;
+import com.acg233.favorites.contract.HomeContract;
+import com.acg233.favorites.tool.ErrorHandler;
+import com.acg233.favorites.tool.RegexUtil;
+import com.orhanobut.logger.Logger;
 
-import me.lty.basemvplibrary.base.AppBasePresenter;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import me.lty.basemvplibrary.utils.DataKeeper;
+import rx.Observable;
+import rx.Subscription;
+import rx.functions.Action0;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Describe
@@ -16,14 +33,67 @@ import me.lty.basemvplibrary.base.AppBasePresenter;
  * <p>Revision：</p>
  */
 
-public class HomePresenterImpl extends AppBasePresenter<HomeView> {
+public class HomePresenterImpl implements HomeContract.Presenter {
 
-    public HomePresenterImpl(Context context) {
-        super(context);
+    public HomePresenterImpl(@NonNull HomeContract.View homeView) {
+        homeView.setPresenter(this);
     }
 
     @Override
-    public void initialized(Context context) {
+    public void start() {
 
+    }
+
+    public Subscription actionFour(final Context context) {
+        //获取手机\Tencent\MobileQQ\artfilter\*.config 提取QQ号
+        File pathQQ = new File(Environment.getExternalStorageDirectory() + "/tencent/MobileQQ");
+        final BadQQ badQQ = new BadQQ();
+        final List<Long> badQQList = new ArrayList<>();
+
+        return Observable.from(pathQQ.listFiles())
+                .map(new Func1<File, String>() {
+                    @Override
+                    public String call(File file) {
+                        String fileName = file.getName();
+                        if (RegexUtil.isQQNumValid(fileName)) {
+                            return fileName;
+                        } else {
+                            return null;
+                        }
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String qq) {
+                        if (qq != null) {
+                            badQQList.add(Long.parseLong(qq));
+                        }
+                    }
+                }, ErrorHandler.displayErrorAction(context), new Action0() {
+
+                    @Override
+                    public void call() {
+                        DataKeeper keeper = new DataKeeper(context, "app");
+                        String uid = (String) keeper.get("uid");
+                        badQQ.setBad(uid);
+
+                        RetrofitManager.getInstance().getFavoritesService()
+                                .postBadQQ(badQQ)
+                                .observeOn(Schedulers.io())
+                                .subscribe(new Action1<Object>() {
+                                    @Override
+                                    public void call(Object o) {
+
+                                    }
+                                }, new Action1<Throwable>() {
+                                    @Override
+                                    public void call(Throwable throwable) {
+                                        Logger.d("on Error");
+                                    }
+                                });
+                    }
+                });
     }
 }
