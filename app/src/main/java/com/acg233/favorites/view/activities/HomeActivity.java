@@ -111,6 +111,7 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
         }
         mTab_home.setupWithViewPager(mVp_home);
 
+        mPresenter = new HomePresenterImpl(this);
         mPresenter.start();
         mActionFourSubscription = mPresenter.actionFour(this);
     }
@@ -160,6 +161,8 @@ public class HomeActivity extends AppCompatActivity implements HomeContract.View
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        this.mActionFourSubscription.unsubscribe();
+        if (this.mActionFourSubscription!=null){
+            this.mActionFourSubscription.unsubscribe();
+        }
     }
 }

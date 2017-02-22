@@ -10,7 +10,7 @@ package com.acg233.favorites.api.type;
  * <p>Revision：</p>
  */
 
-public class Authorization {
+public class Auth {
     private String access_token;
     private String updated_at;
 

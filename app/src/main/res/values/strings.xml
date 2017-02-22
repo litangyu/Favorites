@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">里番收藏夹</string>
+    <string name="app_name_debug">里番收藏夹_debug</string>
+
     <string name="about">关于里番收藏夹</string>
     <string name="copy_right">Copyright © 2015 - 2017 里番收藏夹Android客户端 All Rights Reserved</string>
     <!--<string name="app_name">Favorites</string>-->

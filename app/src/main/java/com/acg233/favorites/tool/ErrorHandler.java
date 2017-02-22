@@ -24,8 +24,8 @@ import rx.functions.Action1;
  */
 
 public class ErrorHandler {
-    private static final String TAG = ErrorHandler.class.getSimpleName();
 
+    private static final String TAG = ErrorHandler.class.getSimpleName();
 
     public static void displayError(Context context, String message) {
         if (context == null) {
@@ -47,6 +47,9 @@ public class ErrorHandler {
             errorMessage = Errors.errorResponse(httpException).error;
         } else if (throwable instanceof UnknownHostException) {
             errorMessage = context.getString(R.string.tip_network_is_not_available);
+        } else {
+            throwable.printStackTrace();
+            return;
         }
         if (errorMessage != null) {
             displayError(context, errorMessage);
@@ -59,7 +62,8 @@ public class ErrorHandler {
 
     public static Action1<Throwable> displayErrorAction(final Context context) {
         return new Action1<Throwable>() {
-            @Override public void call(Throwable throwable) {
+            @Override
+            public void call(Throwable throwable) {
                 displayError(context, throwable);
             }
         };

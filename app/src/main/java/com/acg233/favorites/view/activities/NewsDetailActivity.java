@@ -31,7 +31,7 @@ public class NewsDetailActivity extends BaseActivity implements NewsDetailContra
 
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
-    @BindView(R.id.tv_text)
+    @BindView(R.id.tv_title)
     protected TextView mTv_text;
     @BindView(R.id.backdrop)
     protected SimpleDraweeView mBackdrop;
@@ -70,6 +70,7 @@ public class NewsDetailActivity extends BaseActivity implements NewsDetailContra
 
     @Override
     protected void initData() {
+        mPresenter = new NewsDetailPresenterImpl(this);
         mTv_text.setText("012 [12月]2016年12月里番合集\n" +
                 "magnet:?xt=urn:btih:9150B382EE3D301094CCB80B2DACA7BAB1101DAE");
 

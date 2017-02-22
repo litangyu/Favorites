@@ -10,7 +10,6 @@ import com.acg233.favorites.App;
 import com.acg233.favorites.R;
 import com.acg233.favorites.api.FavoritesService;
 import com.acg233.favorites.api.RetrofitManager;
-import com.acg233.favorites.api.type.BaseRequest;
 import com.acg233.favorites.tool.AuthorizationUtil;
 import com.acg233.favorites.tool.ErrorHandler;
 import com.umeng.analytics.MobclickAgent;
@@ -64,6 +63,7 @@ public class SplashActivity extends AppCompatActivity {
                         } else {
                             startActivity(new Intent(SplashActivity.this, HomeActivity.class));
                         }
+                        finish();
                     }
                 });
 //        actionStart();
@@ -95,10 +95,8 @@ public class SplashActivity extends AppCompatActivity {
                 .flatMap(new Func1<Object, Observable<Integer>>() {
                     @Override
                     public Observable<Integer> call(Object o) {
-                        BaseRequest baseRequest = new BaseRequest();
-                        baseRequest.setToken(token);
                         //第一次激活（检查App版本）
-                        return favoritesService.checkVersion(baseRequest);
+                        return favoritesService.checkVersion();
                     }
                 })
                 .flatMap(new Func1<Integer, Observable<InputStream>>() {

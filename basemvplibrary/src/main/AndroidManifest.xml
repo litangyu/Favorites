@@ -1,10 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="me.lty.basemvplibrary">
 
-    <application android:allowBackup="false"
-                 android:label="@string/app_name"
-                 android:supportsRtl="true"
-    >
+    <application>
 
     </application>
 

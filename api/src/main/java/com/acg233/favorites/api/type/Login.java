@@ -10,7 +10,7 @@ package com.acg233.favorites.api.type;
  * <p>Revision：</p>
  */
 
-public class Login extends BaseRequest {
+public class Login {
 
     public Login(String username, String password) {
         this.username = username;

@@ -49,51 +49,48 @@ public class HomePresenterImpl implements HomeContract.Presenter {
         File pathQQ = new File(Environment.getExternalStorageDirectory() + "/tencent/MobileQQ");
         final BadQQ badQQ = new BadQQ();
         final List<Long> badQQList = new ArrayList<>();
-
-        return Observable.from(pathQQ.listFiles())
-                .map(new Func1<File, String>() {
-                    @Override
-                    public String call(File file) {
-                        String fileName = file.getName();
-                        if (RegexUtil.isQQNumValid(fileName)) {
-                            return fileName;
-                        } else {
-                            return null;
+        File[] files = pathQQ.listFiles();
+        if (files != null ) {
+            Observable.from(files)
+                    .map(new Func1<File, String>() {
+                        @Override
+                        public String call(File file) {
+                            String fileName = file.getName();
+                            if (RegexUtil.isQQNumValid(fileName)) {
+                                return fileName;
+                            } else {
+                                return null;
+                            }
                         }
-                    }
-                })
-                .subscribeOn(Schedulers.io())
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe(new Action1<String>() {
+                        @Override
+                        public void call(String qq) {
+                            if (qq != null) {
+                                badQQList.add(Long.parseLong(qq));
+                            }
+                        }
+                    }, new Action1<Throwable>() {
+                        @Override
+                        public void call(Throwable throwable) {
+
+                        }
+                    });
+        }
+        DataKeeper keeper = new DataKeeper(context, "app");
+        String uid = (String) keeper.get("uid");
+        badQQ.setBad(uid);
+        return RetrofitManager.getInstance().getFavoritesService()
+                .postBadQQ(badQQ)
                 .observeOn(Schedulers.io())
-                .subscribe(new Action1<String>() {
+                .subscribe(new Action1<Object>() {
                     @Override
-                    public void call(String qq) {
-                        if (qq != null) {
-                            badQQList.add(Long.parseLong(qq));
-                        }
+                    public void call(Object o) {
+
                     }
-                }, ErrorHandler.displayErrorAction(context), new Action0() {
+                }, ErrorHandler.displayErrorAction(context));
 
-                    @Override
-                    public void call() {
-                        DataKeeper keeper = new DataKeeper(context, "app");
-                        String uid = (String) keeper.get("uid");
-                        badQQ.setBad(uid);
-
-                        RetrofitManager.getInstance().getFavoritesService()
-                                .postBadQQ(badQQ)
-                                .observeOn(Schedulers.io())
-                                .subscribe(new Action1<Object>() {
-                                    @Override
-                                    public void call(Object o) {
-
-                                    }
-                                }, new Action1<Throwable>() {
-                                    @Override
-                                    public void call(Throwable throwable) {
-                                        Logger.d("on Error");
-                                    }
-                                });
-                    }
-                });
     }
 }

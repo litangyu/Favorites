@@ -1,7 +1,7 @@
 package com.acg233.favorites.api;
 
+import com.acg233.favorites.api.type.Auth;
 import com.acg233.favorites.api.type.BadQQ;
-import com.acg233.favorites.api.type.BaseRequest;
 import com.acg233.favorites.api.type.Login;
 import com.acg233.favorites.api.type.User;
 
@@ -34,7 +34,7 @@ public interface FavoritesService {
     Observable<Object> postToken();
 
     @POST("?type=version")
-    Observable<Integer> checkVersion(@Body BaseRequest request);
+    Observable<Integer> checkVersion();
 
     @GET("download")
     @Streaming  //@Streaming作用为在下载大文件中使用。添加了该注解后，下载文件不会将所有的下载内容加载到内存

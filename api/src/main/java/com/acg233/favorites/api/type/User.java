@@ -22,7 +22,7 @@ public class User implements Serializable{
     private int userLevel;
     private String integral;
     private String experience;
-    private Authorization authorization;
+    private Auth auth;
 
     public String getUsername() {
         return username;
@@ -72,11 +72,11 @@ public class User implements Serializable{
         this.experience = experience;
     }
 
-    public Authorization getAuthorization() {
-        return authorization;
+    public Auth getAuth() {
+        return auth;
     }
 
-    public void setAuthorization(Authorization authorization) {
-        this.authorization = authorization;
+    public void setAuth(Auth auth) {
+        this.auth = auth;
     }
 }

@@ -1,12 +1,18 @@
 package com.acg233.favorites.api;
 
 import com.acg233.favorites.api.tool.ResponseTypeAdapterFactory;
+import com.acg233.favorites.api.type.Auth;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.IOException;
+
 import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -25,6 +31,7 @@ import rx.schedulers.Schedulers;
 
 public class RetrofitManager {
 
+    private static Auth auth = null;
     public static boolean debug = true;
     private static final String BASE_HOST = "http://acg233.com/";
 
@@ -46,6 +53,19 @@ public class RetrofitManager {
             builder.addInterceptor(logging);
         }
         OkHttpClient okHttpClient = builder
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Request original = chain.request();
+                        Request.Builder builder = original.newBuilder();
+                        builder.addHeader("Content-Type", "application/json; charset=utf-8");
+                        builder.addHeader("Accept-Encoding", "gzip");
+                        if (auth != null) {
+                            builder.addHeader("Authorization", "token " + auth.getAccess_token());
+                        }
+                        return chain.proceed(builder.build());
+                    }
+                })
                 .retryOnConnectionFailure(true)
                 .build();
 
@@ -69,6 +89,10 @@ public class RetrofitManager {
             }
         }
         return instance;
+    }
+
+    public static void setAuth(Auth auth) {
+        RetrofitManager.auth = auth;
     }
 
     public FavoritesService getFavoritesService() {

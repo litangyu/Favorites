@@ -12,7 +12,7 @@ import java.util.List;
  * <p>Revision：</p>
  */
 
-public class BadQQ extends BaseRequest {
+public class BadQQ {
     private String bad;
     private List<Long> qq;
 

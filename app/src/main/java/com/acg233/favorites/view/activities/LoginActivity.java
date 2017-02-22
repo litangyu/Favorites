@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import com.acg233.favorites.R;
 import com.acg233.favorites.api.RetrofitManager;
+import com.acg233.favorites.api.type.Auth;
 import com.acg233.favorites.api.type.Login;
 import com.acg233.favorites.api.type.User;
 import com.acg233.favorites.contract.LoginContract;
@@ -76,7 +77,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View,
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
-    private View mProgressView;
     private View mLoginFormView;
     private LoginPresenterImpl mPresenter;
 
@@ -114,7 +114,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View,
         });
 
         mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
     }
 
     @Override
@@ -129,7 +128,7 @@ public class LoginActivity extends BaseActivity implements LoginContract.View,
 
     @Override
     protected void initData() {
-
+        mPresenter = new LoginPresenterImpl(this);
     }
 
     @Override
@@ -255,25 +254,40 @@ public class LoginActivity extends BaseActivity implements LoginContract.View,
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
 
-            Login loginRequest = new Login(email, password);
+            final Login login = new Login(email, password);
             RetrofitManager.getInstance().getFavoritesService()
-                    .login(loginRequest)
+                    .login(login)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action1<User>() {
+                    .doOnNext(new Action1<User>() {
                         @Override
-                        public void call(User userResponse) {
+                        public void call(User user) {
+                            RetrofitManager.setAuth(user.getAuth());
+                            saveLogin(login);
+
                             DataKeeper keeper = new DataKeeper(LoginActivity.this, "app");
-                            keeper.put("uid", userResponse.getUsername());
+                            keeper.put("uid", user.getUsername());
                             keeper.put("isLogin", true);
 
                             Bundle bundle = new Bundle();
-                            bundle.putSerializable("user", userResponse);
+                            bundle.putSerializable("user", user);
                             Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                             intent.putExtras(bundle);
                             startActivity(intent);
                         }
+                    })
+                    .subscribe(new Action1<User>() {
+                        @Override
+                        public void call(User auth) {
+
+                        }
                     }, ErrorHandler.displayErrorAction(LoginActivity.this));
         }
+    }
+
+    private void saveLogin(Login login) {
+//        String encrypted = BlackBoxes.encrypt(context, login.password);
+//        Login encryptedLogin = new Login(login.username, encrypted);
+//        Stores.login(context).save(encryptedLogin);
     }
 
     /**
@@ -295,20 +309,6 @@ public class LoginActivity extends BaseActivity implements LoginContract.View,
                     mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 

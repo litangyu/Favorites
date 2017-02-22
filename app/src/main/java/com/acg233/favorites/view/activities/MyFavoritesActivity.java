@@ -42,7 +42,7 @@ public class MyFavoritesActivity extends BaseActivity implements MyFavoritesCont
 
     @Override
     protected void initData() {
-
+        mPresenter = new MyFavoritesPresenterImpl(this);
     }
 
     @Override
