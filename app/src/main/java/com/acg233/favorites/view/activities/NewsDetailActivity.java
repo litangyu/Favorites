@@ -1,8 +1,11 @@
 package com.acg233.favorites.view.activities;
 
 import android.net.Uri;
+import android.os.Build;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
@@ -29,12 +32,18 @@ import me.lty.basemvplibrary.ui.BaseActivity;
 
 public class NewsDetailActivity extends BaseActivity implements NewsDetailContract.View {
 
+    private static final String TAG = NewsDetailActivity.class.getSimpleName();
+
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
-    @BindView(R.id.tv_title)
-    protected TextView mTv_text;
+    @BindView(R.id.fab_news_detail)
+    protected FloatingActionButton mFab;
+    @BindView(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout mCollapsingToolbar;
     @BindView(R.id.backdrop)
     protected SimpleDraweeView mBackdrop;
+    @BindView(R.id.tv_title)
+    protected TextView mTv_text;
 
     private NewsDetailPresenterImpl mPresenter;
 
@@ -50,17 +59,18 @@ public class NewsDetailActivity extends BaseActivity implements NewsDetailContra
 
     @Override
     protected void initView() {
-        mToolbar.setTitle("001 [12月]  asfdasfdafasf");
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mCollapsingToolbar.setTitle("测试啦");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            this.getWindow().getDecorView().setSystemUiVisibility(View
+                    .SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_news_detail);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        mFab.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_favorite_on));
     }
 
     @Override
@@ -70,32 +80,37 @@ public class NewsDetailActivity extends BaseActivity implements NewsDetailContra
 
     @Override
     protected void initData() {
-        mPresenter = new NewsDetailPresenterImpl(this);
+        Uri uri = Uri.parse(
+                "https://gss0.baidu" +
+                        ".com/94o3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item" +
+                        "/f3d3572c11dfa9ece297da446ad0f703918fc12c.jpg");
+        mBackdrop.setImageURI(uri);
         mTv_text.setText("012 [12月]2016年12月里番合集\n" +
                 "magnet:?xt=urn:btih:9150B382EE3D301094CCB80B2DACA7BAB1101DAE");
-
-        Uri uri = Uri.parse(
-                "https://gss0.baidu.com/94o3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/f3d3572c11dfa9ece297da446ad0f703918fc12c.jpg");
-        mBackdrop.setImageURI(uri);
-
     }
 
     @Override
     protected void setListener() {
-
+        mFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("NewsDetailActivity");
+        MobclickAgent.onPageStart(TAG);
         MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
-        super.onStop();
-        MobclickAgent.onPageEnd("NewsDetailActivity");
+        super.onPause();
+        MobclickAgent.onPageEnd(TAG);
         MobclickAgent.onPause(this);
     }
 }

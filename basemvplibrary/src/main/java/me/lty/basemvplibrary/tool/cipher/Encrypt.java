@@ -1,4 +1,4 @@
-package me.lty.basemvplibrary.utils.cipher;
+package me.lty.basemvplibrary.tool.cipher;
 
 /**
  * @author MaTianyu

@@ -1,4 +1,4 @@
-package me.lty.basemvplibrary.utils;
+package me.lty.basemvplibrary.tool;
 
 import android.content.Context;
 import android.content.res.Configuration;

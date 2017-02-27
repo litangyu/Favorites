@@ -1,7 +1,7 @@
-package me.lty.basemvplibrary.utils.cipher;
+package me.lty.basemvplibrary.tool.cipher;
 
 
-import me.lty.basemvplibrary.utils.Base64;
+import me.lty.basemvplibrary.tool.Base64;
 
 /**
  * @author MaTianyu

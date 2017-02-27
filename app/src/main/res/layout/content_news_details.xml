@@ -5,31 +5,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.acg233.favorites.view.activities.HomeActivity"
     tools:showIn="@layout/activity_news_detail">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tv_title"
-            android:textIsSelectable="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"/>
-        <android.support.v7.widget.CardView
             android:layout_margin="16dp"
+            android:textIsSelectable="true"/>
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:cardCornerRadius="3dp"
+            app:cardElevation="3dp"
+            app:cardUseCompatPadding="true">
+
             <TextView
-                android:padding="16dp"
-                android:text="asdfafafdfafafasfasfasfasfasfasf"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="asdfafafdfafafasfasfasfasfasfasf"/>
         </android.support.v7.widget.CardView>
     </LinearLayout>
 

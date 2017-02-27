@@ -2,7 +2,7 @@ package com.acg233.favorites.tool;
 
 import java.util.regex.Pattern;
 
-import static me.lty.basemvplibrary.utils.Check.isEmpty;
+import static me.lty.basemvplibrary.tool.Check.isEmpty;
 
 /**
  * Describe

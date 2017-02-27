@@ -19,9 +19,9 @@
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
-                android:background="@color/color_E0678C"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:background="@color/color_E0678C"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:title="@string/app_name"
                 app:titleTextColor="@color/black">
@@ -48,10 +48,14 @@
 
     </android.support.design.widget.CoordinatorLayout>
 
-    <FrameLayout
-        android:id="@+id/frame_layout"
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="start"/>
-    <!--<include layout="@layout/fragment_personal_center"/>-->
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/navigation_header"
+        app:menu="@menu/drawer_menu">
+    </android.support.design.widget.NavigationView>
+
 </android.support.v4.widget.DrawerLayout>

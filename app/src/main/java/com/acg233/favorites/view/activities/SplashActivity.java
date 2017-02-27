@@ -21,8 +21,8 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
 
-import me.lty.basemvplibrary.utils.DataKeeper;
-import me.lty.basemvplibrary.utils.FileUtils;
+import me.lty.basemvplibrary.tool.DataKeeper;
+import me.lty.basemvplibrary.tool.FileUtils;
 import okhttp3.ResponseBody;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;

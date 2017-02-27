@@ -15,6 +15,7 @@
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/sdv_news"
+            android:transitionName="@string/transition_string"
             android:layout_width="match_parent"
             android:layout_height="100dp"/>
 

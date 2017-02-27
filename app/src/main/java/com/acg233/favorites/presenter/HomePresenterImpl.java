@@ -9,16 +9,14 @@ import com.acg233.favorites.api.type.BadQQ;
 import com.acg233.favorites.contract.HomeContract;
 import com.acg233.favorites.tool.ErrorHandler;
 import com.acg233.favorites.tool.RegexUtil;
-import com.orhanobut.logger.Logger;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.lty.basemvplibrary.utils.DataKeeper;
+import me.lty.basemvplibrary.tool.DataKeeper;
 import rx.Observable;
 import rx.Subscription;
-import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;

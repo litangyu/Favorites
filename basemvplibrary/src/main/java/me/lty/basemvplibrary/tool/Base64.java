@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package me.lty.basemvplibrary.utils;
+package me.lty.basemvplibrary.tool;
 
 import java.io.UnsupportedEncodingException;
 

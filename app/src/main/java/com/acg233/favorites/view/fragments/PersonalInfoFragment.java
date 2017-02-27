@@ -31,7 +31,9 @@ import me.lty.basemvplibrary.ui.BaseFragment;
  * <p>Revision：</p>
  */
 
-public class PersonalCenterFragment extends BaseFragment implements HomeContract.View {
+public class PersonalInfoFragment extends BaseFragment implements HomeContract.View {
+
+    private static final String TAG = PersonalInfoFragment.class.getSimpleName();
 
     @BindView(R.id.sdv_head_img)
     protected SimpleDraweeView mSdv_head_img;
@@ -48,7 +50,7 @@ public class PersonalCenterFragment extends BaseFragment implements HomeContract
 
     @Override
     protected int getContentViewLayoutID() {
-        return R.layout.fragment_personal_center;
+        return R.layout.content_personal_center;
     }
 
     @Override
@@ -89,21 +91,12 @@ public class PersonalCenterFragment extends BaseFragment implements HomeContract
 
     }
 
-    @OnClick({R.id.rl_favorites, R.id.rl_notify, R.id.rl_nick_name, R.id.rl_exchange, R.id
-            .rl_invite_people, R.id.tv_modify_pwd, R.id.tv_log_off})
+    @OnClick({ R.id.rl_nick_name, R.id.rl_modify_password, R.id.tv_log_off})
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.rl_favorites:
-                break;
-            case R.id.rl_notify:
-                break;
-            case R.id.rl_exchange:
-                break;
             case R.id.rl_nick_name:
                 break;
-            case R.id.rl_invite_people:
-                break;
-            case R.id.tv_modify_pwd:
+            case R.id.rl_modify_password:
                 break;
             case R.id.tv_log_off:
                 startActivity(new Intent(getActivity(), LoginActivity.class));
@@ -114,12 +107,12 @@ public class PersonalCenterFragment extends BaseFragment implements HomeContract
     @Override
     public void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("PersonalCenterFragment");
+        MobclickAgent.onPageStart(TAG);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        MobclickAgent.onPageEnd("PersonalCenterFragment");
+        MobclickAgent.onPageEnd(TAG);
     }
 }

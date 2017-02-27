@@ -20,11 +20,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="${APP_NAME}"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Theme.AppTheme">
         <activity
             android:name=".view.activities.SplashActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
+            android:theme="@style/ImageTranslucentTheme"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -41,7 +42,6 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
-            android:theme="@style/ColorTranslucentTheme"
             android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.app.searchable"
@@ -50,16 +50,25 @@
         <activity
             android:name=".view.activities.NewsDetailActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
             android:launchMode="singleTop"
-            android:theme="@style/ImageTranslucentTheme"
+            android:parentActivityName=".view.activities.HomeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.activities.HomeActivity"/>
+        </activity>
+
+        <activity
+            android:name=".view.activities.PersonalInfoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".view.activities.SearchResultsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/ColorTranslucentTheme"
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
@@ -68,16 +77,14 @@
         <activity
             android:name=".view.activities.LoginActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
             android:launchMode="singleTop"
-            android:theme="@style/ColorTranslucentTheme"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
             android:name=".view.activities.AboutActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@style/ColorTranslucentTheme"
             android:windowSoftInputMode="stateHidden">
         </activity>
 

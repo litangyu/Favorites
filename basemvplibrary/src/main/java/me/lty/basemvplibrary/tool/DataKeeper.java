@@ -13,13 +13,13 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package me.lty.basemvplibrary.utils;
+package me.lty.basemvplibrary.tool;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import me.lty.basemvplibrary.utils.cipher.Cipher;
+import me.lty.basemvplibrary.tool.cipher.Cipher;
 
 /**
  * @author MaTianyu

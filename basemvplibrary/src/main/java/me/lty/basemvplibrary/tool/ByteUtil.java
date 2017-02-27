@@ -1,4 +1,4 @@
-package me.lty.basemvplibrary.utils;
+package me.lty.basemvplibrary.tool;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
