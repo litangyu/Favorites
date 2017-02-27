@@ -10,9 +10,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import me.lty.basemvplibrary.base.BasePresenter;
 import me.lty.basemvplibrary.base.AppRuntimeException.LayoutResIDException;
-import me.lty.basemvplibrary.base.BaseView;
 
 /**
  * 描述
@@ -30,7 +28,7 @@ public abstract class BaseActivity extends AppCompatActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setTransparentStatusBar();
+//        setTransparentStatusBar();
         int layoutResID = initContentView();
         if (layoutResID == 0) {
             throw new LayoutResIDException();

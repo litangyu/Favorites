@@ -19,11 +19,6 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Override
-    protected void bindView() {
-        ButterKnife.bind(this);
-    }
-
-    @Override
     protected void initView() {
         LoginFragment login = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id
                 .content_frame);
@@ -31,6 +26,11 @@ public class LoginActivity extends BaseActivity {
             login = new LoginFragment();
             ActivityUtil.addFragmentToActivity(getSupportFragmentManager(),login,R.id.content_frame);
         }
+    }
+
+    @Override
+    protected void bindView() {
+        ButterKnife.bind(this);
     }
 
     @Override

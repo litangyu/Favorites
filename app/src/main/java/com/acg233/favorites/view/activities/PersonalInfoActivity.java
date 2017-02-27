@@ -1,11 +1,12 @@
 package com.acg233.favorites.view.activities;
 
+import android.support.v7.widget.Toolbar;
+
 import com.acg233.favorites.R;
 import com.acg233.favorites.tool.ActivityUtil;
 import com.acg233.favorites.view.fragments.PersonalInfoFragment;
 
-import butterknife.ButterKnife;
-import me.lty.basemvplibrary.ui.BaseActivity;
+import butterknife.BindView;
 
 /**
  * Describe
@@ -17,7 +18,10 @@ import me.lty.basemvplibrary.ui.BaseActivity;
  * <p>Revision：</p>
  */
 
-public class PersonalInfoActivity extends BaseActivity {
+public class PersonalInfoActivity extends ToolbarActivity {
+
+    @BindView(R.id.toolbar)
+    protected Toolbar mToolbar;
 
     @Override
     protected int initContentView() {
@@ -25,12 +29,9 @@ public class PersonalInfoActivity extends BaseActivity {
     }
 
     @Override
-    protected void bindView() {
-        ButterKnife.bind(this);
-    }
-
-    @Override
     protected void initView() {
+        super.initView();
+        mToolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         PersonalInfoFragment personalInfo = (PersonalInfoFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.content_frame);
         if (personalInfo == null) {

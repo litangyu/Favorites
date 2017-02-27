@@ -50,7 +50,7 @@ public class PersonalInfoFragment extends BaseFragment implements HomeContract.V
 
     @Override
     protected int getContentViewLayoutID() {
-        return R.layout.content_personal_center;
+        return R.layout.content_personal_info;
     }
 
     @Override

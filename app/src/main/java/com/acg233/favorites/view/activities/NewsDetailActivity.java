@@ -6,7 +6,6 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,8 +16,6 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import me.lty.basemvplibrary.ui.BaseActivity;
 
 /**
  * Describe
@@ -30,12 +27,10 @@ import me.lty.basemvplibrary.ui.BaseActivity;
  * <p>Revision：</p>
  */
 
-public class NewsDetailActivity extends BaseActivity implements NewsDetailContract.View {
+public class NewsDetailActivity extends ToolbarActivity implements NewsDetailContract.View {
 
     private static final String TAG = NewsDetailActivity.class.getSimpleName();
 
-    @BindView(R.id.toolbar)
-    protected Toolbar mToolbar;
     @BindView(R.id.fab_news_detail)
     protected FloatingActionButton mFab;
     @BindView(R.id.collapsing_toolbar)
@@ -53,23 +48,13 @@ public class NewsDetailActivity extends BaseActivity implements NewsDetailContra
     }
 
     @Override
-    protected void bindView() {
-        ButterKnife.bind(this);
-    }
-
-    @Override
     protected void initView() {
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        super.initView();
         mCollapsingToolbar.setTitle("测试啦");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             this.getWindow().getDecorView().setSystemUiVisibility(View
                     .SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimaryDark));
-        }
-
         mFab.setImageDrawable(ContextCompat.getDrawable(this, R.mipmap.ic_favorite_on));
     }
 
