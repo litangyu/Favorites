@@ -222,7 +222,6 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
             final Login login = new Login(email, password);
             RetrofitManager.getInstance().getFavoritesService()
                     .login(login)
-                    .observeOn(AndroidSchedulers.mainThread())
                     .doOnNext(new Action1<User>() {
                         @Override
                         public void call(User user) {
@@ -240,6 +239,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View {
                             startActivity(intent);
                         }
                     })
+                    .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Action1<User>() {
                         @Override
                         public void call(User auth) {

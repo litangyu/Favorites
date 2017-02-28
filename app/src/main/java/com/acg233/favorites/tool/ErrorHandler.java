@@ -1,16 +1,17 @@
 package com.acg233.favorites.tool;
 
 import android.content.Context;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.acg233.favorites.R;
 import com.acg233.favorites.api.tool.Errors;
+import com.orhanobut.logger.Logger;
 
 import java.net.UnknownHostException;
 
 import retrofit2.adapter.rxjava.HttpException;
-import rx.exceptions.CompositeException;
 import rx.functions.Action1;
 
 /**
@@ -52,6 +53,10 @@ public class ErrorHandler {
             return;
         }
         if (errorMessage != null) {
+            if (Thread.currentThread() != Looper.getMainLooper().getThread()){
+                Logger.e("The current thread is not the main thread, you need to call subscribeOn (AndroidSchedulers.mainThread)");
+                return;
+            }
             displayError(context, errorMessage);
         } else {
             Log.e(TAG, "[301]", throwable);

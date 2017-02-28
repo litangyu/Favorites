@@ -17,6 +17,7 @@ import java.util.List;
 import me.lty.basemvplibrary.tool.DataKeeper;
 import rx.Observable;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -82,7 +83,7 @@ public class HomePresenterImpl implements HomeContract.Presenter {
         badQQ.setBad(uid);
         return RetrofitManager.getInstance().getFavoritesService()
                 .postBadQQ(badQQ)
-                .observeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Object>() {
                     @Override
                     public void call(Object o) {

@@ -35,14 +35,14 @@ public class NewsFragment extends BaseFragment implements HomeContract.View {
 
     @BindView(R.id.swipe_refresh)
     protected SwipeRefreshLayout mSwipeRefresh;
-    @BindView(R.id.rv_news)
+    @BindView(R.id.recycler_view)
     protected RecyclerView mRv_news;
 
     private HomePresenterImpl mPresenter;
 
     @Override
     protected int getContentViewLayoutID() {
-        return R.layout.fragment_news;
+        return R.layout.layout_list;
     }
 
     @Override

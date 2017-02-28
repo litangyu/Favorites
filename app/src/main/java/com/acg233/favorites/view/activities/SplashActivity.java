@@ -42,6 +42,8 @@ import rx.schedulers.Schedulers;
 
 public class SplashActivity extends AppCompatActivity {
 
+    private static final String TAG = SplashActivity.class.getSimpleName();
+
     private FavoritesService favoritesService;
     private DataKeeper keeper;
 
@@ -52,18 +54,29 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         keeper = new DataKeeper(this, "app");
+        final boolean first_install = keeper.get("first_install", true);
         Observable.timer(3, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<Long>() {
                     @Override
                     public void call(Long seconds) {
-                        if (!keeper.get("isLogin", false)) {
-                            //用户未登录
-                            startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                        if (!first_install) {
+                            if (!keeper.get("isLogin", false)) {
+                                //用户未登录
+                                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                            } else {
+                                startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                            }
                         } else {
-                            startActivity(new Intent(SplashActivity.this, HomeActivity.class));
+                            keeper.put("first_install", false);
+                            startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
                         }
                         finish();
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
                     }
                 });
 //        actionStart();
@@ -75,7 +88,6 @@ public class SplashActivity extends AppCompatActivity {
     private void actionStart() {
         favoritesService = RetrofitManager.getInstance().getFavoritesService();
         favoritesService.getTime()
-                .observeOn(Schedulers.io())
                 .flatMap(new Func1<Long, Observable<?>>() {
                     @Override
                     public Observable<?> call(Long time) {
@@ -106,14 +118,13 @@ public class SplashActivity extends AppCompatActivity {
                             //强制更新
                             return favoritesService.download("")
                                     .unsubscribeOn(Schedulers.io())
-                                    .unsubscribeOn(Schedulers.io())
+                                    .observeOn(Schedulers.computation())
                                     .map(new Func1<ResponseBody, InputStream>() {
                                         @Override
                                         public InputStream call(ResponseBody body) {
                                             return body.byteStream();
                                         }
                                     })
-                                    .observeOn(Schedulers.computation())
                                     .doOnNext(new Action1<InputStream>() {
                                         @Override
                                         public void call(InputStream inputStream) {
@@ -125,7 +136,6 @@ public class SplashActivity extends AppCompatActivity {
                                                 FileUtils.writeFile(inputStream, outputFile);
                                             } catch (IOException e) {
                                                 e.printStackTrace();
-//                                                throw new CustomizeException(e.getMessage(), e);
                                             }
                                         }
                                     })
@@ -136,6 +146,7 @@ public class SplashActivity extends AppCompatActivity {
                         }
                     }
                 })
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<InputStream>() {
                     @Override
                     public void call(InputStream inputStream) {
@@ -147,14 +158,14 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onPageStart("SplashActivity");
+        MobclickAgent.onPageStart(TAG);
         MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onStop();
-        MobclickAgent.onPageEnd("SplashActivity");
+        MobclickAgent.onPageEnd(TAG);
         MobclickAgent.onPause(this);
     }
 

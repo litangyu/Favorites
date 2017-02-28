@@ -1,5 +1,6 @@
 package com.acg233.favorites.view.fragments;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,14 +31,16 @@ import me.lty.basemvplibrary.ui.BaseFragment;
 
 public class HistoryFragment extends BaseFragment implements HomeContract.View{
 
-    @BindView(R.id.rv_history)
+    @BindView(R.id.swipe_refresh)
+    protected SwipeRefreshLayout mSwipeRefresh;
+    @BindView(R.id.recycler_view)
     protected RecyclerView mRv_history;
 
     private HomePresenterImpl mPresenter;
 
     @Override
     protected int getContentViewLayoutID() {
-        return R.layout.fragment_history;
+        return R.layout.layout_list;
     }
 
     @Override
